@@ -1,160 +1,576 @@
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Dan Andrei Grigorescu | Cybersecurity</title>
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dan Andrei Grigorescu | Cybersecurity Portfolio</title>
   <style>
+    :root {
+      --bg: #020617;
+      --bg-soft: #0f172a;
+      --card: rgba(15, 23, 42, 0.88);
+      --card-2: rgba(2, 6, 23, 0.72);
+      --border: rgba(148, 163, 184, 0.18);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --accent: #22d3ee;
+      --accent-2: #67e8f9;
+      --white: #ffffff;
+      --shadow: 0 20px 50px rgba(0,0,0,.35);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: Inter, system-ui;
-      color: #e2e8f0;
-      background: linear-gradient(-45deg, #020617, #0f172a, #020617, #082f49);
-      background-size: 400% 400%;
-      animation: gradientMove 12s ease infinite;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(34, 211, 238, 0.10), transparent 30%),
+        radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 25%),
+        linear-gradient(180deg, #020617 0%, #020617 100%);
+      color: var(--text);
+      line-height: 1.6;
     }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
 
     .container {
-      max-width: 1100px;
-      margin: auto;
-      padding: 40px 20px;
+      width: min(1200px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 48px;
     }
 
     .hero {
-      background: rgba(15, 23, 42, 0.85);
-      border: 1px solid rgba(148,163,184,0.2);
-      border-radius: 20px;
-      padding: 40px;
-      position: relative;
+      display: grid;
+      grid-template-columns: 1.35fr 0.95fr;
+      gap: 28px;
+      background: linear-gradient(135deg, rgba(2,6,23,0.96), rgba(15,23,42,0.92) 55%, rgba(10,37,64,0.95));
+      border: 1px solid var(--border);
+      border-radius: 32px;
+      box-shadow: var(--shadow);
+      padding: 42px;
       overflow: hidden;
+      position: relative;
     }
 
-    .hero::after {
+    .hero::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at center, rgba(34,211,238,0.1), transparent 60%);
+      background: radial-gradient(circle at 20% 10%, rgba(34, 211, 238, 0.10), transparent 25%);
       pointer-events: none;
     }
 
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 14px;
+      border: 1px solid rgba(34, 211, 238, 0.24);
+      background: rgba(34, 211, 238, 0.08);
+      color: var(--accent-2);
+      border-radius: 999px;
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+
     h1 {
+      font-size: clamp(2.4rem, 6vw, 4.4rem);
+      line-height: 1.05;
       margin: 0;
-      font-size: 42px;
-      color: white;
+      color: var(--white);
+      letter-spacing: -0.03em;
     }
 
-    .subtitle {
-      color: #22d3ee;
-      margin-top: 10px;
+    .lead {
+      margin: 18px 0 0;
+      max-width: 760px;
+      font-size: 1.06rem;
+      color: var(--muted);
     }
 
-    p {
-      color: #94a3b8;
-      max-width: 700px;
+    .pills, .hero-buttons, .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
-    .buttons {
-      margin-top: 20px;
+    .pills { margin-top: 24px; }
+
+    .pill {
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 18px;
+      padding: 10px 14px;
+      font-size: 14px;
     }
+
+    .hero-buttons { margin-top: 28px; }
 
     .btn {
-      padding: 12px 16px;
-      border-radius: 12px;
-      margin-right: 10px;
-      font-weight: bold;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px 18px;
+      border-radius: 18px;
+      border: 1px solid transparent;
+      font-weight: 700;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
     }
 
+    .btn:hover { transform: translateY(-1px); }
     .btn-primary {
-      background: #22d3ee;
-      color: black;
+      background: var(--accent);
+      color: #082f49;
+    }
+    .btn-secondary {
+      border-color: var(--border);
+      background: rgba(255,255,255,0.04);
+      color: var(--white);
     }
 
-    .btn-secondary {
-      border: 1px solid rgba(148,163,184,0.3);
+    .hero-side {
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+
+    .side-card, .section, .project-card, .timeline-card, .mini-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .side-card {
+      padding: 22px;
+      backdrop-filter: blur(8px);
+    }
+
+    .side-card h3,
+    .section h2,
+    .project-card h3,
+    .timeline-card h3,
+    .mini-card h3 {
+      margin: 0;
+      color: var(--white);
+    }
+
+    .section-title-kicker {
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .stack {
+      display: grid;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .cert-item {
+      background: var(--card-2);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px 16px;
+      font-size: 15px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1.05fr 1.3fr;
+      gap: 24px;
+      margin-top: 24px;
+    }
+
+    .grid-main {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      margin-top: 24px;
     }
 
     .section {
-      margin-top: 30px;
-      background: rgba(15,23,42,0.85);
-      padding: 25px;
+      padding: 28px;
+    }
+
+    .section p {
+      color: var(--muted);
+      margin: 14px 0 0;
+    }
+
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 22px;
+    }
+
+    .skill-card {
+      background: var(--card-2);
+      border: 1px solid var(--border);
       border-radius: 20px;
-      border: 1px solid rgba(148,163,184,0.2);
+      padding: 18px;
     }
 
-    .project {
-      margin-top: 15px;
+    .skill-card h3 {
+      margin-bottom: 12px;
+      color: var(--accent-2);
+      font-size: 1rem;
     }
 
-    .tags span {
-      border: 1px solid rgba(148,163,184,0.3);
-      padding: 5px 10px;
-      margin: 3px;
-      display: inline-block;
+    .tag-list span {
+      border: 1px solid var(--border);
+      background: rgba(15, 23, 42, 0.9);
       border-radius: 999px;
+      padding: 7px 11px;
       font-size: 12px;
+      color: var(--text);
     }
 
+    .projects-wrap {
+      margin-top: 22px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .project-card {
+      padding: 22px;
+      background: var(--card-2);
+    }
+
+    .project-subtitle {
+      color: var(--accent-2);
+      margin-top: 8px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    ul.clean {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+      display: grid;
+      gap: 10px;
+    }
+
+    ul.clean li {
+      position: relative;
+      padding-left: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    ul.clean li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 9px;
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: var(--accent);
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .small-link {
+      padding: 10px 14px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--card-2);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .timeline-card {
+      padding: 22px;
+      background: var(--card-2);
+      margin-top: 18px;
+    }
+
+    .timeline-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .timeline-role {
+      font-size: 1.14rem;
+      font-weight: 700;
+      color: var(--white);
+    }
+
+    .timeline-company {
+      color: var(--accent-2);
+      font-weight: 600;
+      margin-top: 4px;
+    }
+
+    .timeline-period {
+      border: 1px solid var(--border);
+      background: rgba(15,23,42,.9);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 13px;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .sidebar-stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .mini-card {
+      padding: 24px;
+      background: var(--card);
+    }
+
+    .mini-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      padding: 30px 10px 14px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1100px) {
+      .hero,
+      .grid-2,
+      .grid-main,
+      .projects-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .skills-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 700px) {
+      .container { width: min(100% - 20px, 1200px); }
+      .hero, .section, .side-card, .project-card, .timeline-card, .mini-card { padding: 20px; }
+      .pills, .hero-buttons, .tag-list { gap: 10px; }
+      .btn { width: 100%; }
+      .hero-buttons a { width: 100%; }
+    }
   </style>
-
 </head>
-
 <body>
   <div class="container">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Cybersecurity Student • SOC / Blue Team • Cloud Security</div>
+        <h1>Dan Andrei Grigorescu</h1>
+        <p class="lead">
+          Triple-certified cybersecurity student with hands-on experience in Microsoft Sentinel,
+          Azure-based threat detection, and practical blue team workflows. Focused on SOC,
+          log analysis, SIEM operations, and cloud security.
+        </p>
 
-```
-<div class="hero">
-  <h1>Dan Andrei Grigorescu</h1>
-  <div class="subtitle">Cybersecurity Student • SOC / Blue Team</div>
+        <div class="pills">
+          <span class="pill">Bucharest, Romania</span>
+          <span class="pill">danandreigrigorescu@yahoo.ro</span>
+          <span class="pill">+40 771 030 299</span>
+        </div>
 
-  <p>
-    Triple-certified cybersecurity student with hands-on experience in Microsoft Sentinel,
-    SIEM monitoring and real-world attack analysis.
-  </p>
+        <div class="hero-buttons">
+          <a class="btn btn-primary" href="#projects">View Projects</a>
+          <a class="btn btn-secondary" href="CVpdf.pdf" target="_blank">Download CV</a>
+          <a class="btn btn-secondary" href="https://github.com/danydanyqwer/azure-sentinel-honeypot" target="_blank">Sentinel Project</a>
+        </div>
+      </div>
 
-  <div class="buttons">
-    <a class="btn btn-primary" href="#projects">Projects</a>
-    <a class="btn btn-secondary" href="CVpdf.pdf" target="_blank">Download CV</a>
-    <a class="btn btn-secondary" href="https://github.com/danydanyqwer/azure-sentinel-honeypot" target="_blank">Sentinel Project</a>
-  </div>
-</div>
+      <div class="hero-side">
+        <div class="side-card">
+          <span class="section-title-kicker">Core Focus</span>
+          <h3>SOC / Blue Team Direction</h3>
+          <div class="stack">
+            <div>SOC Monitoring</div>
+            <div>Blue Team Operations</div>
+            <div>Microsoft Sentinel</div>
+            <div>KQL Detection Engineering</div>
+            <div>Cloud Security</div>
+          </div>
+        </div>
 
-<div class="section">
-  <h2>Skills</h2>
-  <div class="tags">
-    <span>Azure</span><span>Sentinel</span><span>KQL</span><span>SIEM</span>
-    <span>Linux</span><span>Networking</span><span>Python</span><span>Burp Suite</span>
-  </div>
-</div>
+        <div class="side-card">
+          <span class="section-title-kicker">Certifications</span>
+          <h3>Verified Technical Foundation</h3>
+          <div class="stack">
+            <div class="cert-item">CompTIA Network+ (N10-009)</div>
+            <div class="cert-item">CompTIA Security+ (SY0-701)</div>
+            <div class="cert-item">Microsoft Certified: Azure Fundamentals (AZ-900)</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div id="projects" class="section">
-  <h2>Projects</h2>
+    <section class="grid-2">
+      <div class="section">
+        <h2>Professional Profile</h2>
+        <p>
+          Aspiring Cybersecurity and Network Engineer with a strong technical foundation in Linux,
+          networking, and cloud infrastructure security. Hands-on experience deploying Azure Sentinel
+          honeypot labs, analyzing 70,000+ real-world attack events, and working through SIEM monitoring
+          fundamentals and incident analysis scenarios.
+        </p>
+      </div>
 
-  <div class="project">
-    <strong>Azure Sentinel Honeypot</strong>
-    <p>Analyzed 70,000+ brute force attacks and built detection rules using KQL.</p>
-  </div>
+      <div class="section">
+        <h2>Technical Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-card">
+            <h3>Security Tools</h3>
+            <div class="tag-list">
+              <span>Active Directory</span><span>Microsoft Entra</span><span>Nmap</span><span>Gobuster</span><span>Hydra</span><span>Burp Suite</span><span>Splunk</span><span>ELK</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>Networking</h3>
+            <div class="tag-list">
+              <span>TCP/IP</span><span>OSI Model</span><span>Subnetting</span><span>DHCP</span><span>DNS</span><span>Cisco CLI</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>Cloud</h3>
+            <div class="tag-list">
+              <span>Microsoft Azure</span><span>IaaS / PaaS / SaaS</span><span>VNet</span><span>RBAC</span><span>Policy</span><span>Governance</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>Operating Systems</h3>
+            <div class="tag-list">
+              <span>Linux (Ubuntu, Kali)</span><span>Windows</span><span>Cisco IOS</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>Programming / DB</h3>
+            <div class="tag-list">
+              <span>Python</span><span>C</span><span>C++</span><span>SystemVerilog</span><span>Bash</span><span>MySQL</span>
+            </div>
+          </div>
+          <div class="skill-card">
+            <h3>QA / Collaboration</h3>
+            <div class="tag-list">
+              <span>Jira</span><span>TestRail</span><span>Confluence</span><span>Slack</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-  <div class="project">
-    <strong>TryHackMe SOC Path</strong>
-    <p>Hands-on SIEM monitoring, log analysis and incident response labs.</p>
-  </div>
+    <section id="projects" class="section" style="margin-top: 24px;">
+      <div class="top-row">
+        <h2>Projects & Labs</h2>
+        <a class="small-link" href="https://github.com/danydanyqwer" target="_blank">View GitHub</a>
+      </div>
 
-  <div class="project">
-    <strong>Unbreakable Romania CTF</strong>
-    <p>Web exploitation and OSINT challenges including race condition attacks.</p>
-  </div>
-</div>
-```
+      <div class="projects-wrap">
+        <article class="project-card">
+          <h3>Azure Sentinel Honeypot Lab</h3>
+          <div class="project-subtitle">Real-world brute-force detection and analysis</div>
+          <ul class="clean">
+            <li>Deployed an intentionally exposed Windows VM in Azure and configured DCR + AMA-based log collection.</li>
+            <li>Analyzed 70,000+ failed logon attempts from 11 IPs across 8 countries using Microsoft Sentinel.</li>
+            <li>Built KQL detection rules for automated brute-force alerting and investigation.</li>
+            <li>Created a SOC-style dashboard and attack analysis workflow based on Event ID 4625 telemetry.</li>
+          </ul>
+          <div class="tag-list" style="margin-top: 16px;">
+            <span>Azure</span><span>Sentinel</span><span>KQL</span><span>SIEM</span><span>Blue Team</span>
+          </div>
+        </article>
 
+        <article class="project-card">
+          <h3>TryHackMe SOC Level 1 Path</h3>
+          <div class="project-subtitle">Hands-on SOC and incident analysis training</div>
+          <ul class="clean">
+            <li>Practicing SIEM monitoring, log analysis, and incident response workflows.</li>
+            <li>Completed the Mr. Robot CTF room covering reconnaissance, WordPress exploitation, reverse shell via PHP injection, and privilege escalation via SUID.</li>
+          </ul>
+          <div class="tag-list" style="margin-top: 16px;">
+            <span>SOC</span><span>Logs</span><span>Detection</span><span>Incident Response</span>
+          </div>
+        </article>
+
+        <article class="project-card">
+          <h3>Unbreakable Romania 2026 CTF</h3>
+          <div class="project-subtitle">Web exploitation and OSINT challenge solving</div>
+          <ul class="clean">
+            <li>Exploited a race condition vulnerability using Burp Suite Turbo Intruder and concurrent request flooding.</li>
+            <li>Solved OSINT investigation challenges involving geolocation and identification using open-source techniques.</li>
+          </ul>
+          <div class="tag-list" style="margin-top: 16px;">
+            <span>CTF</span><span>Web Security</span><span>OSINT</span><span>Burp Suite</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="grid-main">
+      <div class="section">
+        <h2>Professional Experience</h2>
+        <div class="timeline-card">
+          <div class="timeline-meta">
+            <div>
+              <div class="timeline-role">QA Game Tester – Graveyard Shift</div>
+              <div class="timeline-company">Electronic Arts Romania (via Smart Tree)</div>
+            </div>
+            <div class="timeline-period">Apr 2024 – Oct 2024</div>
+          </div>
+          <ul class="clean">
+            <li>Executed QA testing cycles for Apex Legends, reporting critical bugs and UI issues across multiple platforms.</li>
+            <li>Managed bug triage and patch validation using Jira and TestRail in a fast-paced environment.</li>
+            <li>Collaborated with developers through smoke and regression testing to support issue resolution.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="sidebar-stack">
+        <div class="mini-card">
+          <h3>Education</h3>
+          <p><strong style="color:#fff;">Politehnica University of Bucharest</strong><br>BSc Electronics, Telecommunications & IT<br>2023 – Present<br>Relevant coursework: Computer Networks, Operating Systems, Digital Design</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Languages</h3>
+          <p><strong style="color:#fff;">Romanian</strong> — Native</p>
+          <p><strong style="color:#fff;">English</strong> — C1 Advanced (Cambridge CAE), near-native fluency</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>Extra</h3>
+          <p><strong style="color:#fff;">Driving License</strong> — Category B</p>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      Built as a simple one-file portfolio site for GitHub Pages.
+    </div>
   </div>
 </body>
 </html>
