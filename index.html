@@ -4,573 +4,1011 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dan Andrei Grigorescu | Cybersecurity Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #020617;
-      --bg-soft: #0f172a;
-      --card: rgba(15, 23, 42, 0.88);
-      --card-2: rgba(2, 6, 23, 0.72);
-      --border: rgba(148, 163, 184, 0.18);
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --accent: #22d3ee;
-      --accent-2: #67e8f9;
-      --white: #ffffff;
-      --shadow: 0 20px 50px rgba(0,0,0,.35);
-      --radius: 24px;
+      --bg: #050A0F;
+      --bg2: #080F17;
+      --card: rgba(10, 20, 35, 0.85);
+      --border: rgba(0, 200, 255, 0.12);
+      --border2: rgba(0, 200, 255, 0.06);
+      --text: #C8D8E8;
+      --muted: #5A7A96;
+      --accent: #00C8FF;
+      --accent2: #00FF88;
+      --accent3: #FF6B35;
+      --white: #EEF4FA;
+      --mono: 'Space Mono', monospace;
+      --sans: 'Syne', sans-serif;
     }
 
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
+
     body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(34, 211, 238, 0.10), transparent 30%),
-        radial-gradient(circle at top right, rgba(59, 130, 246, 0.12), transparent 25%),
-        linear-gradient(180deg, #020617 0%, #020617 100%);
+      font-family: var(--sans);
+      background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.65;
+      overflow-x: hidden;
     }
 
-    a { color: inherit; text-decoration: none; }
-    img { max-width: 100%; display: block; }
-
-    .container {
-      width: min(1200px, calc(100% - 32px));
-      margin: 0 auto;
-      padding: 28px 0 48px;
-    }
-
-    .hero {
-      display: grid;
-      grid-template-columns: 1.35fr 0.95fr;
-      gap: 28px;
-      background: linear-gradient(135deg, rgba(2,6,23,0.96), rgba(15,23,42,0.92) 55%, rgba(10,37,64,0.95));
-      border: 1px solid var(--border);
-      border-radius: 32px;
-      box-shadow: var(--shadow);
-      padding: 42px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .hero::before {
-      content: "";
-      position: absolute;
+    /* ── NOISE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
       inset: 0;
-      background: radial-gradient(circle at 20% 10%, rgba(34, 211, 238, 0.10), transparent 25%);
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
       pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 14px;
-      border: 1px solid rgba(34, 211, 238, 0.24);
-      background: rgba(34, 211, 238, 0.08);
-      color: var(--accent-2);
-      border-radius: 999px;
-      font-size: 14px;
-      margin-bottom: 18px;
+    /* ── SCAN LINE ── */
+    body::after {
+      content: '';
+      position: fixed;
+      top: -100vh;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.15;
+      animation: scan 8s linear infinite;
+      pointer-events: none;
+      z-index: 9999;
     }
 
-    h1 {
-      font-size: clamp(2.4rem, 6vw, 4.4rem);
-      line-height: 1.05;
-      margin: 0;
-      color: var(--white);
-      letter-spacing: -0.03em;
+    @keyframes scan {
+      0% { top: -2px; }
+      100% { top: 100vh; }
     }
 
-    .lead {
-      margin: 18px 0 0;
-      max-width: 760px;
-      font-size: 1.06rem;
-      color: var(--muted);
+    /* ── GRID BG ── */
+    .grid-bg {
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,200,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,200,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .pills, .hero-buttons, .tag-list {
+    /* ── GLOW ORBS ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      pointer-events: none;
+      z-index: 0;
+      animation: orb-drift 20s ease-in-out infinite alternate;
+    }
+    .orb-1 { width: 600px; height: 600px; background: rgba(0,200,255,0.06); top: -200px; left: -200px; animation-delay: 0s; }
+    .orb-2 { width: 500px; height: 500px; background: rgba(0,255,136,0.05); bottom: -100px; right: -100px; animation-delay: -7s; }
+    .orb-3 { width: 400px; height: 400px; background: rgba(255,107,53,0.04); top: 40%; left: 40%; animation-delay: -14s; }
+
+    @keyframes orb-drift {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, 40px) scale(1.1); }
+    }
+
+    /* ── LAYOUT ── */
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1160px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── FADE IN ANIMATIONS ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── NAV ── */
+    nav {
       display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .pills { margin-top: 24px; }
-
-    .pill {
-      background: rgba(15, 23, 42, 0.7);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 18px;
-      padding: 10px 14px;
-      font-size: 14px;
-    }
-
-    .hero-buttons { margin-top: 28px; }
-
-    .btn {
-      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      padding: 14px 18px;
-      border-radius: 18px;
-      border: 1px solid transparent;
-      font-weight: 700;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      justify-content: space-between;
+      padding: 28px 0 20px;
+      border-bottom: 1px solid var(--border2);
+      margin-bottom: 0;
     }
 
-    .btn:hover { transform: translateY(-1px); }
-    .btn-primary {
-      background: var(--accent);
-      color: #082f49;
-    }
-    .btn-secondary {
-      border-color: var(--border);
-      background: rgba(255,255,255,0.04);
-      color: var(--white);
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
     }
 
-    .hero-side {
-      display: grid;
-      gap: 18px;
-      align-content: start;
+    .nav-links {
+      display: flex;
+      gap: 28px;
     }
 
-    .side-card, .section, .project-card, .timeline-card, .mini-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    .side-card {
-      padding: 22px;
-      backdrop-filter: blur(8px);
-    }
-
-    .side-card h3,
-    .section h2,
-    .project-card h3,
-    .timeline-card h3,
-    .mini-card h3 {
-      margin: 0;
-      color: var(--white);
-    }
-
-    .section-title-kicker {
-      text-transform: uppercase;
-      letter-spacing: .18em;
+    .nav-links a {
+      font-family: var(--mono);
       font-size: 12px;
       color: var(--muted);
-      margin-bottom: 10px;
-      display: block;
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      transition: color 0.2s;
     }
 
-    .stack {
-      display: grid;
-      gap: 14px;
+    .nav-links a:hover { color: var(--accent); }
+
+    /* ── STATUS BADGE ── */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent2);
+      letter-spacing: 0.1em;
+      padding: 6px 14px;
+      border: 1px solid rgba(0,255,136,0.2);
+      border-radius: 4px;
+      background: rgba(0,255,136,0.05);
+      margin-top: 60px;
+      margin-bottom: 28px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--accent2);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(0,255,136,0.4); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(0,255,136,0); }
+    }
+
+    /* ── HERO ── */
+    .hero-name {
+      font-size: clamp(3rem, 8vw, 6.5rem);
+      font-weight: 800;
+      line-height: 0.95;
+      color: var(--white);
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
+
+    .hero-name span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(0,200,255,0.4);
+    }
+
+    .hero-sub {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--accent);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 28px;
       margin-top: 16px;
     }
 
-    .cert-item {
-      background: var(--card-2);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 14px 16px;
-      font-size: 15px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1.05fr 1.3fr;
-      gap: 24px;
-      margin-top: 24px;
-    }
-
-    .grid-main {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 24px;
-      margin-top: 24px;
-    }
-
-    .section {
-      padding: 28px;
-    }
-
-    .section p {
+    .hero-desc {
+      max-width: 580px;
       color: var(--muted);
-      margin: 14px 0 0;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      margin-bottom: 36px;
     }
 
+    .hero-desc strong { color: var(--text); font-weight: 600; }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 40px;
+      align-items: start;
+      margin-bottom: 60px;
+    }
+
+    /* ── BUTTONS ── */
+    .btns { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .btn {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      padding: 13px 22px;
+      border-radius: 4px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #020A12;
+      font-weight: 700;
+      border: 1px solid var(--accent);
+    }
+    .btn-primary:hover {
+      background: transparent;
+      color: var(--accent);
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── CERT STACK (hero side) ── */
+    .cert-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    .cert-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .cert-item:hover {
+      border-color: rgba(0,200,255,0.3);
+      transform: translateX(4px);
+    }
+
+    .cert-icon {
+      font-family: var(--mono);
+      font-size: 18px;
+      color: var(--accent);
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .cert-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    .cert-code {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .sec-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .sec-title {
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--white);
+      margin-bottom: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border2);
+      margin: 56px 0;
+    }
+
+    /* ── SKILLS ── */
     .skills-grid {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
-      margin-top: 22px;
     }
 
     .skill-card {
-      background: var(--card-2);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 18px;
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 20px;
+      transition: border-color 0.25s, transform 0.25s;
     }
 
-    .skill-card h3 {
+    .skill-card:hover {
+      border-color: var(--border);
+      transform: translateY(-2px);
+    }
+
+    .skill-cat {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      color: var(--accent);
+      text-transform: uppercase;
       margin-bottom: 12px;
-      color: var(--accent-2);
-      font-size: 1rem;
     }
 
-    .tag-list span {
-      border: 1px solid var(--border);
-      background: rgba(15, 23, 42, 0.9);
-      border-radius: 999px;
-      padding: 7px 11px;
-      font-size: 12px;
+    .tag-wrap { display: flex; flex-wrap: wrap; gap: 7px; }
+
+    .tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: 3px;
+      background: rgba(0,200,255,0.06);
+      border: 1px solid rgba(0,200,255,0.12);
       color: var(--text);
+      transition: background 0.2s, color 0.2s;
     }
 
-    .projects-wrap {
-      margin-top: 22px;
+    .tag:hover {
+      background: rgba(0,200,255,0.14);
+      color: var(--accent);
+    }
+
+    /* ── PROJECTS ── */
+    .projects-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: 1.5fr 1fr;
       gap: 18px;
     }
 
     .project-card {
-      padding: 22px;
-      background: var(--card-2);
-    }
-
-    .project-subtitle {
-      color: var(--accent-2);
-      margin-top: 8px;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    ul.clean {
-      list-style: none;
-      padding: 0;
-      margin: 16px 0 0;
-      display: grid;
-      gap: 10px;
-    }
-
-    ul.clean li {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 28px;
+      transition: border-color 0.25s, transform 0.25s;
       position: relative;
-      padding-left: 18px;
-      color: var(--muted);
-      font-size: 14px;
+      overflow: hidden;
     }
 
-    ul.clean li::before {
-      content: "";
+    .project-card::before {
+      content: '';
       position: absolute;
-      left: 0;
-      top: 9px;
-      width: 7px;
-      height: 7px;
-      border-radius: 999px;
-      background: var(--accent);
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
     }
 
-    .top-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
+    .project-card:hover {
+      border-color: rgba(0,200,255,0.25);
+      transform: translateY(-3px);
     }
 
-    .small-link {
-      padding: 10px 14px;
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      background: var(--card-2);
-      color: var(--text);
-      font-size: 14px;
-      font-weight: 600;
+    .project-card:hover::before { opacity: 1; }
+
+    .project-card.featured {
+      grid-row: span 2;
+      border-color: rgba(0,200,255,0.15);
     }
 
-    .timeline-card {
-      padding: 22px;
-      background: var(--card-2);
-      margin-top: 18px;
-    }
-
-    .timeline-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
+    .project-number {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
       margin-bottom: 10px;
     }
 
-    .timeline-role {
-      font-size: 1.14rem;
+    .project-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .project-sub {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent2);
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+    }
+
+    ul.bullets {
+      list-style: none;
+      padding: 0;
+      display: grid;
+      gap: 9px;
+      margin-bottom: 20px;
+    }
+
+    ul.bullets li {
+      padding-left: 16px;
+      position: relative;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    ul.bullets li::before {
+      content: '›';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .project-tags { display: flex; flex-wrap: wrap; gap: 7px; margin-top: auto; }
+
+    .ptag {
+      font-family: var(--mono);
+      font-size: 10px;
+      padding: 4px 9px;
+      border-radius: 3px;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+    }
+
+    /* ── TIMELINE / EXPERIENCE ── */
+    .exp-card {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 28px;
+      transition: border-color 0.25s;
+    }
+
+    .exp-card:hover { border-color: var(--border); }
+
+    .exp-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .exp-role {
+      font-size: 1.1rem;
       font-weight: 700;
       color: var(--white);
     }
 
-    .timeline-company {
-      color: var(--accent-2);
-      font-weight: 600;
+    .exp-company {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
       margin-top: 4px;
     }
 
-    .timeline-period {
-      border: 1px solid var(--border);
-      background: rgba(15,23,42,.9);
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 13px;
-      color: var(--text);
+    .exp-period {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      border: 1px solid var(--border2);
+      padding: 5px 12px;
+      border-radius: 3px;
       white-space: nowrap;
     }
 
-    .sidebar-stack {
+    /* ── BOTTOM GRID ── */
+    .bottom-grid {
       display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 18px;
+      margin-top: 18px;
     }
 
-    .mini-card {
-      padding: 24px;
+    .info-card {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 22px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+
+    .info-card:hover {
+      border-color: var(--border);
+      transform: translateY(-2px);
+    }
+
+    .info-card-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .info-card p {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .info-card strong { color: var(--text); }
+
+    /* ── CONTACT ROW ── */
+    .contact-row {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 32px;
+    }
+
+    .contact-chip {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.2s;
       background: var(--card);
     }
 
-    .mini-card p {
-      margin: 10px 0 0;
-      color: var(--muted);
-      font-size: 15px;
+    .contact-chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
     }
 
-    .footer {
+    /* ── FOOTER ── */
+    footer {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
       text-align: center;
+      padding: 32px 0 16px;
+      border-top: 1px solid var(--border2);
+      letter-spacing: 0.08em;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-layout { grid-template-columns: 1fr; }
+      .skills-grid { grid-template-columns: repeat(2, 1fr); }
+      .projects-grid { grid-template-columns: 1fr; }
+      .project-card.featured { grid-row: span 1; }
+      .bottom-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .skills-grid { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .hero-name { font-size: 2.8rem; }
+    }
+
+    /* ── TYPED CURSOR ── */
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--accent);
+      margin-left: 4px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ── COUNTER STAT ── */
+    .stat-row {
+      display: flex;
+      gap: 32px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stat-num {
+      font-family: var(--mono);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 12px;
       color: var(--muted);
-      padding: 30px 10px 14px;
-      font-size: 14px;
+      margin-top: 4px;
     }
 
-    @media (max-width: 1100px) {
-      .hero,
-      .grid-2,
-      .grid-main,
-      .projects-wrap {
-        grid-template-columns: 1fr;
-      }
-
-      .skills-grid {
-        grid-template-columns: 1fr;
-      }
+    /* ── GLITCH ON NAME ── */
+    @keyframes glitch {
+      0%, 92%, 100% { clip-path: none; transform: none; }
+      93% { clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%); transform: translateX(-4px); }
+      94% { clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%); transform: translateX(4px); }
+      95% { clip-path: none; transform: none; }
+      96% { clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%); transform: translateX(-2px); }
+      97% { clip-path: none; transform: none; }
     }
 
-    @media (max-width: 700px) {
-      .container { width: min(100% - 20px, 1200px); }
-      .hero, .section, .side-card, .project-card, .timeline-card, .mini-card { padding: 20px; }
-      .pills, .hero-buttons, .tag-list { gap: 10px; }
-      .btn { width: 100%; }
-      .hero-buttons a { width: 100%; }
-    }
+    .hero-name:hover { animation: glitch 2s ease forwards; cursor: default; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <section class="hero">
+  <div class="grid-bg"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="wrap">
+    <nav class="reveal">
+      <div class="nav-logo">DAG // CYBER</div>
+      <div class="nav-links">
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#experience">Experience</a>
+        <a href="mailto:danandreigrigorescu@yahoo.ro">Contact</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero-layout">
       <div>
-        <div class="eyebrow">Cybersecurity Student • SOC / Blue Team • Cloud Security</div>
-        <h1>Dan Andrei Grigorescu</h1>
-        <p class="lead">
-          Triple-certified cybersecurity student with hands-on experience in Microsoft Sentinel,
-          Azure-based threat detection, and practical blue team workflows. Focused on SOC,
-          log analysis, SIEM operations, and cloud security.
-        </p>
-
-        <div class="pills">
-          <span class="pill">Bucharest, Romania</span>
-          <span class="pill">danandreigrigorescu@yahoo.ro</span>
-          <span class="pill">+40 771 030 299</span>
+        <div class="status-badge reveal" style="transition-delay:0.1s">
+          <div class="status-dot"></div>
+          AVAILABLE FOR SOC / BLUE TEAM INTERNSHIP
         </div>
 
-        <div class="hero-buttons">
+        <h1 class="hero-name reveal" style="transition-delay:0.2s">
+          Dan Andrei
+          <span>Grigorescu</span>
+        </h1>
+
+        <div class="hero-sub reveal" style="transition-delay:0.3s">
+          Cybersecurity Student — SOC / Blue Team — Cloud Security<span class="cursor"></span>
+        </div>
+
+        <p class="hero-desc reveal" style="transition-delay:0.35s">
+          <strong>Aspiring SOC analyst</strong> with practical experience in threat detection, log analysis, and blue team operations.
+          Triple-certified (Security+, Network+, AZ-900), with a deployed <strong>Azure Sentinel honeypot lab</strong> analyzing
+          70,000+ real-world attack events. Former QA Game Tester at <strong>Electronic Arts</strong>, bringing rigorous
+          attention to detail to SIEM operations and incident response.
+        </p>
+
+        <div class="btns reveal" style="transition-delay:0.4s">
           <a class="btn btn-primary" href="#projects">View Projects</a>
-          <a class="btn btn-secondary" href="CVpdf.pdf" target="_blank">Download CV</a>
-          <a class="btn btn-secondary" href="https://github.com/danydanyqwer/azure-sentinel-honeypot" target="_blank">Sentinel Project</a>
+          <a class="btn btn-outline" href="https://github.com/danydanyqwer/azure-sentinel-honeypot" target="_blank">GitHub ↗</a>
+          <a class="btn btn-outline" href="https://linkedin.com/in/grigorescu-dan-andrei" target="_blank">LinkedIn ↗</a>
+        </div>
+
+        <div class="stat-row reveal" style="transition-delay:0.45s">
+          <div class="stat">
+            <div class="stat-num" data-target="70000">0</div>
+            <div class="stat-label">Attack Events Analyzed</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" data-target="8">0</div>
+            <div class="stat-label">Countries in Dataset</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" data-target="50">0</div>
+            <div class="stat-label">THM Labs Completed</div>
+          </div>
+          <div class="stat">
+            <div class="stat-num" data-target="3">0</div>
+            <div class="stat-label">Certifications</div>
+          </div>
         </div>
       </div>
 
-      <div class="hero-side">
-        <div class="side-card">
-          <span class="section-title-kicker">Core Focus</span>
-          <h3>SOC / Blue Team Direction</h3>
-          <div class="stack">
-            <div>SOC Monitoring</div>
-            <div>Blue Team Operations</div>
-            <div>Microsoft Sentinel</div>
-            <div>KQL Detection Engineering</div>
-            <div>Cloud Security</div>
+      <div class="cert-stack reveal" style="transition-delay:0.5s">
+        <div class="cert-item">
+          <div class="cert-icon">⬡</div>
+          <div>
+            <div class="cert-name">CompTIA Security+</div>
+            <div class="cert-code">SY0-701</div>
           </div>
         </div>
-
-        <div class="side-card">
-          <span class="section-title-kicker">Certifications</span>
-          <h3>Verified Technical Foundation</h3>
-          <div class="stack">
-            <div class="cert-item">CompTIA Network+ (N10-009)</div>
-            <div class="cert-item">CompTIA Security+ (SY0-701)</div>
-            <div class="cert-item">Microsoft Certified: Azure Fundamentals (AZ-900)</div>
+        <div class="cert-item">
+          <div class="cert-icon">⬡</div>
+          <div>
+            <div class="cert-name">CompTIA Network+</div>
+            <div class="cert-code">N10-009</div>
           </div>
         </div>
-      </div>
-    </section>
-
-    <section class="grid-2">
-      <div class="section">
-        <h2>Professional Profile</h2>
-        <p>
-          Aspiring Cybersecurity and Network Engineer with a strong technical foundation in Linux,
-          networking, and cloud infrastructure security. Hands-on experience deploying Azure Sentinel
-          honeypot labs, analyzing 70,000+ real-world attack events, and working through SIEM monitoring
-          fundamentals and incident analysis scenarios.
-        </p>
-      </div>
-
-      <div class="section">
-        <h2>Technical Skills</h2>
-        <div class="skills-grid">
-          <div class="skill-card">
-            <h3>Security Tools</h3>
-            <div class="tag-list">
-              <span>Active Directory</span><span>Microsoft Entra</span><span>Nmap</span><span>Gobuster</span><span>Hydra</span><span>Burp Suite</span><span>Splunk</span><span>ELK</span>
-            </div>
+        <div class="cert-item">
+          <div class="cert-icon">⬡</div>
+          <div>
+            <div class="cert-name">Azure Fundamentals</div>
+            <div class="cert-code">AZ-900</div>
           </div>
-          <div class="skill-card">
-            <h3>Networking</h3>
-            <div class="tag-list">
-              <span>TCP/IP</span><span>OSI Model</span><span>Subnetting</span><span>DHCP</span><span>DNS</span><span>Cisco CLI</span>
-            </div>
-          </div>
-          <div class="skill-card">
-            <h3>Cloud</h3>
-            <div class="tag-list">
-              <span>Microsoft Azure</span><span>IaaS / PaaS / SaaS</span><span>VNet</span><span>RBAC</span><span>Policy</span><span>Governance</span>
-            </div>
-          </div>
-          <div class="skill-card">
-            <h3>Operating Systems</h3>
-            <div class="tag-list">
-              <span>Linux (Ubuntu, Kali)</span><span>Windows</span><span>Cisco IOS</span>
-            </div>
-          </div>
-          <div class="skill-card">
-            <h3>Programming / DB</h3>
-            <div class="tag-list">
-              <span>Python</span><span>C</span><span>C++</span><span>SystemVerilog</span><span>Bash</span><span>MySQL</span>
-            </div>
-          </div>
-          <div class="skill-card">
-            <h3>QA / Collaboration</h3>
-            <div class="tag-list">
-              <span>Jira</span><span>TestRail</span><span>Confluence</span><span>Slack</span>
-            </div>
+        </div>
+        <div class="cert-item" style="border-color: rgba(0,255,136,0.2); margin-top: 8px;">
+          <div class="cert-icon" style="color: var(--accent2);">◈</div>
+          <div>
+            <div class="cert-name">THM SOC Level 1</div>
+            <div class="cert-code">Top 5% Globally</div>
           </div>
         </div>
       </div>
-    </section>
-
-    <section id="projects" class="section" style="margin-top: 24px;">
-      <div class="top-row">
-        <h2>Projects & Labs</h2>
-        <a class="small-link" href="https://github.com/danydanyqwer" target="_blank">View GitHub</a>
-      </div>
-
-      <div class="projects-wrap">
-        <article class="project-card">
-          <h3>Azure Sentinel Honeypot Lab</h3>
-          <div class="project-subtitle">Real-world brute-force detection and analysis</div>
-          <ul class="clean">
-            <li>Deployed an intentionally exposed Windows VM in Azure and configured DCR + AMA-based log collection.</li>
-            <li>Analyzed 70,000+ failed logon attempts from 11 IPs across 8 countries using Microsoft Sentinel.</li>
-            <li>Built KQL detection rules for automated brute-force alerting and investigation.</li>
-            <li>Created a SOC-style dashboard and attack analysis workflow based on Event ID 4625 telemetry.</li>
-          </ul>
-          <div class="tag-list" style="margin-top: 16px;">
-            <span>Azure</span><span>Sentinel</span><span>KQL</span><span>SIEM</span><span>Blue Team</span>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <h3>TryHackMe SOC Level 1 Path</h3>
-          <div class="project-subtitle">Hands-on SOC and incident analysis training</div>
-          <ul class="clean">
-            <li>Practicing SIEM monitoring, log analysis, and incident response workflows.</li>
-            <li>Completed the Mr. Robot CTF room covering reconnaissance, WordPress exploitation, reverse shell via PHP injection, and privilege escalation via SUID.</li>
-          </ul>
-          <div class="tag-list" style="margin-top: 16px;">
-            <span>SOC</span><span>Logs</span><span>Detection</span><span>Incident Response</span>
-          </div>
-        </article>
-
-        <article class="project-card">
-          <h3>Unbreakable Romania 2026 CTF</h3>
-          <div class="project-subtitle">Web exploitation and OSINT challenge solving</div>
-          <ul class="clean">
-            <li>Exploited a race condition vulnerability using Burp Suite Turbo Intruder and concurrent request flooding.</li>
-            <li>Solved OSINT investigation challenges involving geolocation and identification using open-source techniques.</li>
-          </ul>
-          <div class="tag-list" style="margin-top: 16px;">
-            <span>CTF</span><span>Web Security</span><span>OSINT</span><span>Burp Suite</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="grid-main">
-      <div class="section">
-        <h2>Professional Experience</h2>
-        <div class="timeline-card">
-          <div class="timeline-meta">
-            <div>
-              <div class="timeline-role">QA Game Tester – Graveyard Shift</div>
-              <div class="timeline-company">Electronic Arts Romania (via Smart Tree)</div>
-            </div>
-            <div class="timeline-period">Apr 2024 – Oct 2024</div>
-          </div>
-          <ul class="clean">
-            <li>Executed QA testing cycles for Apex Legends, reporting critical bugs and UI issues across multiple platforms.</li>
-            <li>Managed bug triage and patch validation using Jira and TestRail in a fast-paced environment.</li>
-            <li>Collaborated with developers through smoke and regression testing to support issue resolution.</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="sidebar-stack">
-        <div class="mini-card">
-          <h3>Education</h3>
-          <p><strong style="color:#fff;">Politehnica University of Bucharest</strong><br>BSc Electronics, Telecommunications & IT<br>2023 – Present<br>Relevant coursework: Computer Networks, Operating Systems, Digital Design</p>
-        </div>
-
-        <div class="mini-card">
-          <h3>Languages</h3>
-          <p><strong style="color:#fff;">Romanian</strong> — Native</p>
-          <p><strong style="color:#fff;">English</strong> — C1 Advanced (Cambridge CAE), near-native fluency</p>
-        </div>
-
-        <div class="mini-card">
-          <h3>Extra</h3>
-          <p><strong style="color:#fff;">Driving License</strong> — Category B</p>
-        </div>
-      </div>
-    </section>
-
-    <div class="footer">
-      Built as a simple one-file portfolio site for GitHub Pages.
     </div>
+
+    <hr class="divider">
+
+    <!-- SKILLS -->
+    <div id="skills" class="reveal">
+      <div class="sec-label">Technical Stack</div>
+      <div class="sec-title">Skills & Tools</div>
+      <div class="skills-grid">
+        <div class="skill-card">
+          <div class="skill-cat">Security Tools</div>
+          <div class="tag-wrap">
+            <span class="tag">Microsoft Sentinel</span>
+            <span class="tag">Splunk</span>
+            <span class="tag">ELK</span>
+            <span class="tag">Wireshark</span>
+            <span class="tag">Snort (IDS/IPS)</span>
+            <span class="tag">Burp Suite</span>
+            <span class="tag">Nmap</span>
+            <span class="tag">Gobuster</span>
+            <span class="tag">Hydra</span>
+            <span class="tag">AD / Entra</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-cat">Cloud & Infrastructure</div>
+          <div class="tag-wrap">
+            <span class="tag">Microsoft Azure</span>
+            <span class="tag">VNet</span>
+            <span class="tag">IaaS / PaaS</span>
+            <span class="tag">RBAC</span>
+            <span class="tag">Azure Policy</span>
+            <span class="tag">DCR / AMA</span>
+            <span class="tag">KQL</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-cat">Networking</div>
+          <div class="tag-wrap">
+            <span class="tag">TCP/IP</span>
+            <span class="tag">OSI Model</span>
+            <span class="tag">Subnetting</span>
+            <span class="tag">DHCP</span>
+            <span class="tag">DNS</span>
+            <span class="tag">Cisco CLI</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-cat">Operating Systems</div>
+          <div class="tag-wrap">
+            <span class="tag">Linux (Ubuntu, Kali)</span>
+            <span class="tag">Windows</span>
+            <span class="tag">Cisco IOS</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-cat">Programming</div>
+          <div class="tag-wrap">
+            <span class="tag">Python</span>
+            <span class="tag">Bash</span>
+            <span class="tag">C / C++</span>
+            <span class="tag">MySQL</span>
+            <span class="tag">SystemVerilog</span>
+          </div>
+        </div>
+        <div class="skill-card">
+          <div class="skill-cat">Frameworks & Methodologies</div>
+          <div class="tag-wrap">
+            <span class="tag">MITRE ATT&CK</span>
+            <span class="tag">Cyber Kill Chain</span>
+            <span class="tag">Incident Response</span>
+            <span class="tag">Threat Intel</span>
+            <span class="tag">Jira / TestRail</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- PROJECTS -->
+    <div id="projects" class="reveal">
+      <div class="sec-label">Labs & Projects</div>
+      <div class="sec-title">Cybersecurity Work</div>
+
+      <div class="projects-grid">
+        <!-- FEATURED -->
+        <div class="project-card featured">
+          <div class="project-number">01 // FLAGSHIP PROJECT</div>
+          <div class="project-title">Azure Sentinel Honeypot Lab</div>
+          <div class="project-sub">REAL-WORLD THREAT DETECTION & ANALYSIS</div>
+          <ul class="bullets">
+            <li>Deployed intentionally exposed Windows VM in Azure; configured DCR + AMA data collection, monitored real-world Logon Type 3 brute-force attacks via Event ID 4625.</li>
+            <li>Resolved data ingestion failure — switched from basic DCR to Windows Security Events via AMA connector after initial config returned no logs in Sentinel.</li>
+            <li>Analyzed <strong style="color:var(--text)">70,000+ failed logon attempts</strong> from 8+ countries; identified suspicious infrastructure via IP reputation and telemetry analysis.</li>
+            <li>Wrote custom KQL detection rule (≥50 failed logons / 5 min per IP), generating actionable alerts via threshold-based correlation.</li>
+            <li>Built Sentinel Workbook with attack dashboard and geographic map of attacker origin.</li>
+            <li>Attempted IP geolocation via KQL's <code style="font-family:var(--mono);color:var(--accent);font-size:12px">geo_info_from_ip_address</code>; identified Azure student account limitation, pivoted to manual threat intel via AbuseIPDB & VirusTotal.</li>
+          </ul>
+          <div class="project-tags">
+            <span class="ptag">Azure Sentinel</span>
+            <span class="ptag">KQL</span>
+            <span class="ptag">DCR / AMA</span>
+            <span class="ptag">Event ID 4625</span>
+            <span class="ptag">Threat Intel</span>
+            <span class="ptag">Blue Team</span>
+          </div>
+        </div>
+
+        <!-- SMALLER CARDS -->
+        <div class="project-card">
+          <div class="project-number">02 // THM PATH</div>
+          <div class="project-title">SOC Level 1 Learning Path</div>
+          <div class="project-sub">TRYHACKME // TOP 5% GLOBALLY</div>
+          <ul class="bullets">
+            <li>50+ hands-on labs in log analysis, network forensics, and incident investigation.</li>
+            <li>Wireshark, Snort, and Splunk for traffic analysis, IDS rule writing, and log correlation.</li>
+            <li>Applied Cyber Kill Chain and MITRE ATT&CK frameworks to real-world attack scenarios.</li>
+            <li>Completed Mr. Robot CTF: nmap recon, WordPress/Hydra enumeration, PHP reverse shell, SUID privilege escalation.</li>
+          </ul>
+          <div class="project-tags">
+            <span class="ptag">SIEM</span><span class="ptag">Wireshark</span><span class="ptag">Snort</span><span class="ptag">Splunk</span><span class="ptag">CTF</span>
+          </div>
+        </div>
+
+        <div class="project-card">
+          <div class="project-number">03 // COMPETITION</div>
+          <div class="project-title">Unbreakable Romania CTF 2026</div>
+          <div class="project-sub">NATIONAL CTF // TEAM EDITION</div>
+          <ul class="bullets">
+            <li>Race Condition exploit via Burp Suite Turbo Intruder — 200+ concurrent requests bypassing business logic.</li>
+            <li>OSINT geolocation and identification challenge solved using advanced open-source intelligence techniques.</li>
+          </ul>
+          <div class="project-tags">
+            <span class="ptag">Web Exploitation</span><span class="ptag">OSINT</span><span class="ptag">Burp Suite</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- EXPERIENCE -->
+    <div id="experience" class="reveal">
+      <div class="sec-label">Work History</div>
+      <div class="sec-title">Professional Experience</div>
+
+      <div class="exp-card">
+        <div class="exp-top">
+          <div>
+            <div class="exp-role">QA Game Tester — Graveyard Shift</div>
+            <div class="exp-company">Electronic Arts Romania (via Smart Tree) // Bucharest</div>
+          </div>
+          <div class="exp-period">Apr 2024 – Oct 2024</div>
+        </div>
+        <ul class="bullets">
+          <li>Executed QA testing cycles for Apex Legends; reported critical bugs and UI issues across multiple platforms.</li>
+          <li>Managed bug triage and patch validation using Jira and TestRail in a fast-paced environment.</li>
+          <li>Collaborated with developers on regression and smoke testing to resolve game-breaking issues.</li>
+        </ul>
+      </div>
+
+      <div class="bottom-grid">
+        <div class="info-card">
+          <div class="info-card-label">Education</div>
+          <p>
+            <strong>Politehnica University of Bucharest (UPB)</strong><br>
+            BSc Electronics, Telecommunications & IT (ETTI)<br>
+            English-taught program · 2023 – Present<br><br>
+            <span style="font-size:12px; color: var(--muted);">Computer Networks · Operating Systems · Digital Design</span>
+          </p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Languages</div>
+          <p>
+            <strong>Romanian</strong> — Native<br><br>
+            <strong>English</strong> — C1 Advanced (CAE)<br>
+            Near-native fluency (C2)<br>
+            <span style="font-size:12px; color:var(--muted);">English-taught BSc program</span>
+          </p>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Extra</div>
+          <p>
+            <strong>Member</strong> — CSA Romania<br><br>
+            <strong>Driving License</strong> — Category B<br><br>
+            <strong>Location</strong> — Bucharest, Romania
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-row reveal">
+      <a class="contact-chip" href="mailto:danandreigrigorescu@yahoo.ro">danandreigrigorescu@yahoo.ro</a>
+      <a class="contact-chip" href="tel:+40771030299">+40 771 030 299</a>
+      <a class="contact-chip" href="www.linkedin.com/in/dan-andrei-grigorescu-ab73272aa" target="_blank">LinkedIn ↗</a>
+      <a class="contact-chip" href="https://github.com/danydanyqwer" target="_blank">GitHub ↗</a>
+      <a class="contact-chip" href="https://tryhackme.com/p/danydanyqwer" target="_blank">TryHackMe ↗</a>
+    </div>
+
+    <footer>
+      <br>DAN ANDREI GRIGORESCU // CYBERSECURITY PORTFOLIO // BUCHAREST 2026
+    </footer>
   </div>
+
+  <script>
+    // ── SCROLL REVEAL ──
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+
+    // Trigger hero items immediately
+    setTimeout(() => {
+      reveals.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) el.classList.add('visible');
+      });
+    }, 50);
+
+    // ── COUNTER ANIMATION ──
+    function animateCounter(el, target, duration = 1800) {
+      const isLarge = target > 999;
+      const suffix = isLarge ? 'k+' : (target === 50 ? '+' : '');
+      const displayTarget = isLarge ? Math.floor(target / 1000) : target;
+      let start = null;
+      const step = (timestamp) => {
+        if (!start) start = timestamp;
+        const progress = Math.min((timestamp - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const current = Math.floor(eased * displayTarget);
+        el.textContent = current + suffix;
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    const statObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          const target = parseInt(e.target.dataset.target);
+          animateCounter(e.target, target);
+          statObserver.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('[data-target]').forEach(el => statObserver.observe(el));
+  </script>
 </body>
 </html>
